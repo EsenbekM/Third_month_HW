@@ -1,16 +1,15 @@
 from typing import List
 from django.http.request import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
-import random
 from .models import BlogPost, Comment
 
 # Create your views here.
 
 def blog_view(request):
+    user = request.user
     blogs: List[BlogPost] = BlogPost.objects.all()
-    num = random.randint(1, 1000)
-    return render(request, 'index.html', context={'num':num, 'blogs':blogs})
+    return render(request, 'index.html', context={'blogs':blogs})
 
 def blog_detail_view(request: HttpRequest, id: int):
     blog = BlogPost.objects.get(id=id)
@@ -22,6 +21,6 @@ def create_comment_view(request: HttpRequest, post_id):
         data = request.POST
         if data.get("text"):
             Comment.objects.create(text=data["text"], post_id=post_id)
-            return HttpResponse("Comment suchesfull added")
+            return redirect("/blog/")
         else:
             return HttpResponse("Empty field ERROR!!!")

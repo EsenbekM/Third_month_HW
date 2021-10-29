@@ -9,35 +9,104 @@
 </head>
 <body>
 
-    <div style="text-align: center; margin-top: 100px;">
-        <h2>{{ blog.title }}</h2>
-        <img src="{{ blog.image.url }}" style="margin-top: 50px;">
-        <p>{{ blog.description }}</p>
-    </div>
+    <!-- Responsive navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#!">ESSA Tech-Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Home</a></li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="/users/logout/">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users/profile/">{{ request.user.username }}</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="/users/login/">Sign in</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users/signup/">Sign up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div style="text-align: center; background-color:#8ebf42">
-        <ul>
-            {% for i in comments %}
-            <li>
-                <h3 >
-                    {{ i.text }}
-                </h3>
-                <p>
-                    {{ i.date }}
-                </p>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="container" style="padding-top: 100px;">
+    <div class="row">
+        <!-- Side widgets-->
+        <div class="col-lg-3">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header">Поиск</div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Categories widget-->
+            <div class="card mb-4">
+                <div class="card-header">Категории</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">Web Design</a></li>
+                                <li><a href="#!">HTML</a></li>
+                                <li><a href="#!">Freebies</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">JavaScript</a></li>
+                                <li><a href="#!">CSS</a></li>
+                                <li><a href="#!">Tutorials</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
 
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <a href="/blog/{{ i.id }}"><img class="card-img-top" src="{{ blog.image.url }}" alt="..." /></a>
+                <div class="card-body">
+                    <div class="small text-muted">{{ blog.date }}</div>
+                    <h2 class="card-title">{{ blog.title }}</h2>
+                    <p class="card-text">{{ blog.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% for i in comments %}
+    <div style="padding-left: 150px;" class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-3 mt-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="user d-flex flex-row align-items-center"> <img src="https://th.bing.com/th/id/OIP.fKlHmAnlTkF1WtNpi7I98wHaHw?pid=ImgDet&rs=1" width="30" class="user-img rounded-circle mr-2"> <span><small class="font-weight-bold text-primary">user</small> <small class="font-weight-bold">{{ i.text }} </small></span> </div> <small>{{ i.date }}</small>
+                    </div>
+                    <div class="action d-flex justify-content-between mt-2 align-items-center">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
     <div style="text-align: center; margin-bottom: 100px;">
         <form action="/blog/comment/{{ blog.id }}/" method="post">
             {% csrf_token %}
             <label>
-                <input name="text" type="text">
+                <textarea name="text" class="form-control ml-1 shadow-none textarea"></textarea>
+                <button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button>
             </label>
-            <input type="submit" value="Оставить комментарий" style="background: chartreuse;">
         </form>
     </div>
+
+    <footer class="py-5 bg-dark">
+        <div class="container"><p class="m-0 text-center text-white">Website 2021</p></div>
+    </footer>
 </body>
 </html>
