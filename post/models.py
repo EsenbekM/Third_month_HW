@@ -1,7 +1,4 @@
-from os import name
 from django.db import models
-from django.db.models.deletion import CASCADE
-from django.db.models.fields import CharField, IntegerField
 
 # Create your models here.
 
@@ -11,6 +8,7 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     likes = models.IntegerField(default=0)
+    reposts = models.IntegerField(default=0)
     
 
     def __str__(self):
