@@ -2,7 +2,8 @@ from typing import List
 from django.http.request import HttpRequest
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import UpdateView
 from .models import BlogPost, Comment
 from .forms import BlogForm
 # Create your views here.
@@ -29,27 +30,14 @@ class PostDetailView(DetailView):
         context["comments"] = comments
         return context
 
-def blog_change_view(request, pk):
-    form = BlogForm()
-    if request.method == "POST":
-        form = BlogForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile = BlogPost.objects.get(id=pk)
-            data = form.cleaned_data
-            if data.get("image"):
-                profile.profile_pic = data.get("image")
-            if data.get("title"):
-                profile.age = data.get("title")
-            if data.get("description"):
-                profile.bio = data.get("description")
-
-            profile.save()
-            return HttpResponse("Ready!!")
-
-        else:
-            return render(request, "blog_change.html", context={"form": form})
-    elif request.method == "GET":
-        return render(request, "blog_change.html", context={"form": form})
+class PostChangeView(UpdateView):
+    model = BlogPost
+    fields = {
+        "image",
+        "title",
+        "description"
+    }
+    template_name = "blog_change.html"
 
 
 

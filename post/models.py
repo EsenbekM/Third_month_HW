@@ -13,6 +13,10 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title[:15]
+    
+    def get_absolute_url(self):
+        return f"/blog/{self.pk}/"
+
 
 class Comment(models.Model):
 

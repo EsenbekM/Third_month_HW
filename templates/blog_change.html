@@ -5,13 +5,10 @@
     <title>Blog</title>
 </head>
 <body>
-<form action="/blog/1/change", method="post" enctype="multipart/form-data">
+<form method="post">
   {% csrf_token %}
-
-    {{ form.as_p }}
-    <input type="submit">
-
-    <h1>gwrgwrh</h1>
+  {{ form.as_p }}
+  <input type="submit" value="Update">
 </form>
 
 </body>
